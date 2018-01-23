@@ -10,7 +10,8 @@ ur_include = -I$(shell urweb -print-cinclude)
 b = build
 
 
-all: $b/bcrypt.o $b/ow_crypt.o $b/ow_gensalt.o $b/ow_blowfish.o
+bcrypt.a: $b/ow_gensalt.o $b/ow_blowfish.o $b/ow_crypt.o $b/bcrypt.o
+	ar cr $@ $+
 
 
 $b/bcrypt.o: bcrypt.c bcrypt.h $b/ow_crypt.h | $b
@@ -32,6 +33,7 @@ $b/ow_crypt.h: $c/ow-crypt.h | $b
 $b:
 	mkdir build
 
+.SUFFIXES:
 
 .PHONY: redownload
 redownload:
@@ -41,4 +43,4 @@ redownload:
 
 .PHONY: clean
 clean: 
-	rm -rf build
+	rm -rf build bcrypt.a
