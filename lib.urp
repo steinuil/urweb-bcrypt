@@ -1,0 +1,8 @@
+ffi bcrypt
+benignEffectful Bcrypt.hash
+benignEffectful Bcrypt.check
+include bcrypt.h
+link build/ow_blowfish.o
+link build/ow_gensalt.o
+link build/ow_crypt.o
+link build/bcrypt.o
