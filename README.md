@@ -15,8 +15,7 @@ Here's an example:
       return <xml>Your hashed password is {[hash]}.</xml>
 
     val validate pass hash =
-      valid <- Bcrypt.check pass hash;
-      if valid then
+      if Bcryot.check pass hash then
         return <xml>Your password is valid.</xml>
       else
         return <xml>Invalid password!</xml>
@@ -48,7 +47,7 @@ to your main Makefile. This is roughly what mine looks like:
       urweb project ....
 
     .PHONY: bcrypt/bcrypt.a
-    bcrypt/bcrypt.a: $(BCRYPT_SRC)
+    bcrypt/bcrypt.a:
       @$(MAKE) -C bcrypt
 
     clean:

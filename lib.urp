@@ -1,5 +1,4 @@
 ffi bcrypt
 benignEffectful Bcrypt.hash
-benignEffectful Bcrypt.check
 include bcrypt.h
 link bcrypt.a
