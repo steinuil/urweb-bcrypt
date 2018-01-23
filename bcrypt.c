@@ -1,3 +1,4 @@
+#include <stdio.h>
 #include <string.h>
 #include <urweb.h>
 
@@ -52,12 +53,22 @@ uw_Basis_string uw_Bcrypt_hash(uw_context ctx, uw_Basis_string password) {
     }
   }
 
-  uw_free(salt);
-
   return hash;
 }
 
 uw_Basis_bool uw_Bcrypt_check(uw_context ctx, uw_Basis_string password, uw_Basis_string hash) {
+  char *other_hash = uw_malloc(ctx, BCRYPT_HASH_SIZE);
+  memset(other_hash, 0, BCRYPT_HASH_SIZE);
 
-  return uw_Basis_True;
+  { char *ok = crypt_rn(password, hash, other_hash, BCRYPT_HASH_SIZE);
+    if (ok == NULL) {
+      uw_error(ctx, BOUNDED_RETRY, "Failed to generate hash");
+    }
+  }
+
+  if (strcmp(hash, other_hash) == 0) {
+    return uw_Basis_True;
+  } else {
+    return uw_Basis_False;
+  }
 }
