@@ -10,12 +10,12 @@ The library is functional, but not very thoroughly tested.
 [password hashing functions](https://man.openbsd.org/crypt_checkpass.3).
 Here's an example:
 
-    val hashPassword pass =
+    fun hashPassword pass =
       hash <- Bcrypt.hash pass;
       return <xml>Your hashed password is {[hash]}.</xml>
 
-    val validate pass hash =
-      if Bcryot.check pass hash then
+    fun validate pass hash =
+      if Bcrypt.check pass hash then
         return <xml>Your password is valid.</xml>
       else
         return <xml>Invalid password!</xml>
