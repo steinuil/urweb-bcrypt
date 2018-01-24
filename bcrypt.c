@@ -6,20 +6,22 @@
 #include "ow_crypt.h"
 
 
-#define BCRYPT_HASH_SIZE (7 + 22 + 31 + 1)
+#define BCRYPT_HASH_SIZE    (7 + 22 + 31 + 1)
 #define BCRYPT_GENSALT_SIZE (7 + 22 + 1)
+
+#define BCRYPT_DEFAULT_COST 11
+#define BCRYPT_SALT_SIZE    16
 
 
 uw_Basis_string uw_Bcrypt_genSalt(uw_context ctx, uw_Basis_int cost) {
-  size_t rand_size = 16;
-  char rand_bytes[rand_size];
+  char rand_bytes[BCRYPT_SALT_SIZE];
   { FILE *urand = fopen("/dev/urandom", "r");
     if (!urand) {
       uw_error(ctx, FATAL, "Failed to open /dev/urandom");
     }
 
-    size_t read = fread(&rand_bytes, sizeof(char), rand_size, urand);
-    if (!read || (read / sizeof(char)) < rand_size) {
+    size_t read = fread(&rand_bytes, sizeof(char), BCRYPT_SALT_SIZE, urand);
+    if (!read || (read / sizeof(char)) < BCRYPT_SALT_SIZE) {
       fclose(urand);
       uw_error(ctx, BOUNDED_RETRY, "Failed to read from /dev/urandom");
     }
@@ -31,7 +33,7 @@ uw_Basis_string uw_Bcrypt_genSalt(uw_context ctx, uw_Basis_int cost) {
   }
 
   char *out = uw_malloc(ctx, BCRYPT_GENSALT_SIZE);
-  { char *ok = crypt_gensalt_rn("$2b$", cost, rand_bytes, rand_size, out, BCRYPT_GENSALT_SIZE);
+  { char *ok = crypt_gensalt_rn("$2b$", cost, rand_bytes, BCRYPT_SALT_SIZE, out, BCRYPT_GENSALT_SIZE);
     if (ok == NULL) {
       uw_error(ctx, BOUNDED_RETRY, "Failed to generate salt");
     }
@@ -42,7 +44,7 @@ uw_Basis_string uw_Bcrypt_genSalt(uw_context ctx, uw_Basis_int cost) {
 
 
 uw_Basis_string uw_Bcrypt_hash(uw_context ctx, uw_Basis_string password) {
-  char *salt = uw_Bcrypt_genSalt(ctx, 10);
+  char *salt = uw_Bcrypt_genSalt(ctx, BCRYPT_DEFAULT_COST);
 
   char *hash = uw_malloc(ctx, BCRYPT_HASH_SIZE);
   memset(hash, 0, BCRYPT_HASH_SIZE);

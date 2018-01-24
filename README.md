@@ -1,15 +1,15 @@
 # urweb-bcrypt
-Ur/Web bindings to the [Openwall](http://www.openwall.com/crypt/) blowfish
-hashing implementation. The library is included in the sources.
+Simple and easy to use Ur/Web bindings to the [Openwall](http://www.openwall.com/crypt/)
+blowfish hashing implementation, inspired by OpenBSD's [password hashing functions](https://man.openbsd.org/crypt_checkpass.3).
+The library is already included in the sources.
 
 ## Status
 The library is functional, but not very thoroughly tested.
 
 ## Usage
-`urweb-bcrypt` provides a module `Bcrypt` with an interface similar to OpenBSD's
-[password hashing functions](https://man.openbsd.org/crypt_checkpass.3).
-
-See `bcrypt.urs` for the type signatures.
+The library provides a module `Bcrypt` exposing the functions `hash` and `check`.
+See `bcrypt.urs` for the documentation, and the Example section below for a
+working example.
 
 ## Building
 Building the library requires GNU Make, `gcc` and `ar`. I haven't tested it
